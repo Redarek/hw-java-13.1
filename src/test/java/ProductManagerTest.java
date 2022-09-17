@@ -12,12 +12,34 @@ public class ProductManagerTest {
     Product item3 = new Smartphone(3, "iPhone", 1000);
 
     @Test
-    public void test() {
-        Product[] items = { item3, item1, item2, item3 };
+    public void foundOneProduct() {
+        Product[] items = {item3, item1, item2, item3};
+        doReturn(items).when(repository).findAll();
+
+        Product[] expected = {item2};
+        Product[] actual = manager.searchBy("Metro 2033");
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void foundTwoProducts() {
+        Product[] items = {item3, item1, item2, item3};
         doReturn(items).when(repository).findAll();
 
         Product[] expected = {item3, item3};
         Product[] actual = manager.searchBy("iPhone");
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void notFound() {
+        Product[] items = {item3, item1, item2, item3};
+        doReturn(items).when(repository).findAll();
+
+        Product[] expected = {};
+        Product[] actual = manager.searchBy("Coca-Cola");
 
         Assertions.assertArrayEquals(expected, actual);
     }
